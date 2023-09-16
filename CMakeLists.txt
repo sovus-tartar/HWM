@@ -4,11 +4,11 @@ project(HWM VERSION 0.1.0 LANGUAGES C CXX)
 include(CTest)
 enable_testing()
 
-add_executable(HWM main.cpp)
+add_executable(HWM ./src/main.cpp)
 
 add_compile_options(
     -Werror
-
+    -g
     -Wall
     -Wextra
     -Wpedantic
