@@ -5,7 +5,7 @@
 namespace MyMatrix
 {
 
-    template <typename T>
+    template <typename T = double>
     class Matrix
     {
         T *data;
@@ -41,6 +41,17 @@ namespace MyMatrix
 
         int strings_num;
         int collumns_num;
+
+        void print()
+        {
+            for(int i =  0; i < strings_num; ++i)
+            {
+                for(int j = 0; j < collumns_num; ++j)
+                    std::cout << (*this)[i][j] << " ";
+                
+                std::cout << std::endl;
+            }
+        }
 
         void switch_collumnes(const int i, const int j)
         {
@@ -111,7 +122,7 @@ namespace MyMatrix
         int x, y;
     };
 
-    template <typename T>
+    template <typename T = double>
     class SquareMatrix : public Matrix<T>
     {
     private:
@@ -119,14 +130,12 @@ namespace MyMatrix
         Point get_pivot_of_submatrix(Point S)
         {
             T pivot = 0;
-            Point pivot_location = {0, 0};
+            Point pivot_location = {0, 0};        
 
-            
-
-            for (int i = S.x; i < this->strings_num; ++i)
-                for (int j = S.y; j < this->collumns_num; ++j)
+            for (int i = S.x; i < Matrix<T>::strings_num; ++i)
+                for (int j = S.y; j < Matrix<T>::collumns_num; ++j)
                 {
-                    T temp = abs(this->access(i, j));
+                    T temp = abs(Matrix<T>::access(i, j));
                     if (temp > pivot)
                     {
                         pivot = temp;
@@ -138,7 +147,15 @@ namespace MyMatrix
         };
 
         void eliminate(int x){
+            T pivot = (*this)[x][x];
 
+            for(int i = x + 1; i < this->strings_num; ++i)
+            {
+                T koef = (*this)[i][x] / pivot;
+
+                for(int j = x; j < this->collumns_num; ++j)
+                    (*this)[i][j] = (*this)[i][j] - (*this)[x][j] * koef;
+            }
         };
 
     public:
@@ -146,7 +163,8 @@ namespace MyMatrix
 
         SquareMatrix(int a_) : Matrix<T>(a_, a_){};
 
-        double det(){
+        double det()
+        {
 
         };
     };
@@ -158,6 +176,11 @@ namespace MyMatrix
         {
             Point temp = {i, j};
             return A.get_pivot_of_submatrix(temp);
+        }
+
+        static void test_eliminate(SquareMatrix<double> &A, int x)
+        {
+            A.eliminate(x);
         }
     };
 }

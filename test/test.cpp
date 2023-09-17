@@ -115,6 +115,32 @@ TEST(SquareMatrix, get_pivot2)
     
 }
 
+TEST(SquareMatrix, eliminate)
+{
+    MyMatrix::SquareMatrix<double> A(3);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[0][2] = 3;
+    A[1][0] = 2;
+    A[1][1] = 4;
+    A[1][2] = 6;
+    A[2][0] = 3;
+    A[2][1] = 6;
+    A[2][2] = 9;
+
+    MyMatrix::SquareMatrixTest::test_eliminate(A, 0);
+
+    EXPECT_DOUBLE_EQ(A[0][0], 1);    
+    EXPECT_DOUBLE_EQ(A[0][1], 2);
+    EXPECT_DOUBLE_EQ(A[0][2], 3);
+    EXPECT_DOUBLE_EQ(A[1][0], 0);
+    EXPECT_DOUBLE_EQ(A[1][1], 0);
+    EXPECT_DOUBLE_EQ(A[1][2], 0);
+    EXPECT_DOUBLE_EQ(A[2][0], 0);
+    EXPECT_DOUBLE_EQ(A[2][1], 0);
+    EXPECT_DOUBLE_EQ(A[2][2], 0);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
