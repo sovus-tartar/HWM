@@ -5,6 +5,8 @@
 namespace MyMatrix
 {
 
+    const double epsilon = 0.000001;
+
     template <typename T = double>
     class Matrix
     {
@@ -16,9 +18,11 @@ namespace MyMatrix
         struct proxy_matrix
         {
             int curr_str;
-            Matrix<T> *M;
+            Matrix<T>* M;
+            const Matrix<T>* M_const;
 
-            proxy_matrix(Matrix<T> *M_) : M(M_){};
+            proxy_matrix(Matrix<T>* M_, const int i_) : M(M_), curr_str(i_) {};
+            proxy_matrix(const Matrix<T>* M_, int i_) : M_const(M_), curr_str(i_) {};
 
             proxy_matrix &set_str(int i)
             {
@@ -31,11 +35,11 @@ namespace MyMatrix
                 return M->access(curr_str, curr_coll);
             }
 
-            const T &operator[](const int curr_coll) const
+            const T operator[](const int curr_coll) const
             {
-                return M->access(curr_str, curr_coll);
+                return M_const->access(curr_str, curr_coll);
             }
-        } proxy_;
+        };
 
     public:
 
@@ -69,13 +73,14 @@ namespace MyMatrix
             std::swap(string_order[i], string_order[j]);
         }
 
-        proxy_matrix &operator[](const int i)
+        proxy_matrix operator[](const int i)
         {
-            return proxy_.set_str(i);
+            return proxy_matrix(this, i);
         }
-        const proxy_matrix &operator[](const int i) const
+
+        const proxy_matrix operator[](const int i) const
         {
-            return proxy_.set_str(i);
+            return proxy_matrix(this, i);
         }
 
         T &access(int i, int j)
@@ -86,7 +91,15 @@ namespace MyMatrix
             return data[string_order[i] * collumns_num + collumn_order[j]];
         };
 
-        Matrix(int a, int b) : proxy_(this)
+        const T &access(int i, int j) const
+        {
+            assert(i < strings_num);
+            assert(j < collumns_num);
+
+            return data[string_order[i] * collumns_num + collumn_order[j]];
+        };
+
+        Matrix(int a, int b)
         {
             assert(a > 0);
             assert(b > 0);
@@ -103,6 +116,21 @@ namespace MyMatrix
             collumns_num = b;
             strings_num = a;
         };
+
+        bool operator==(Matrix<T>& rhs) const  
+        {
+            if((strings_num == rhs.strings_num) && (collumns_num == rhs.collumns_num))
+            {
+                for(int i = 0; i < strings_num; ++i)
+                    for(int j = 0; j < collumns_num; ++j)
+                        if((*this)[i][j] - rhs[i][j] >= epsilon)
+                            return false;
+            }
+            else
+                return false;
+
+            return true;
+        }
 
         // copy ctr
         // copy assign

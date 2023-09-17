@@ -141,6 +141,59 @@ TEST(SquareMatrix, eliminate)
     EXPECT_DOUBLE_EQ(A[2][2], 0);
 }
 
+TEST(Matrix, operator_equal1)
+{
+    MyMatrix::SquareMatrix A(3);
+    MyMatrix::SquareMatrix B(3);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[0][2] = 3;
+    A[1][0] = 2;
+    A[1][1] = 4;
+    A[1][2] = 6;
+    A[2][0] = 3;
+    A[2][1] = 6;
+    A[2][2] = 9;
+
+    B[0][0] = 1;
+    B[0][1] = 2;
+    B[0][2] = 3;
+    B[1][0] = 2;
+    B[1][1] = 4;
+    B[1][2] = 6;
+    B[2][0] = 3;
+    B[2][1] = 6;
+    B[2][2] = 9;
+
+    EXPECT_TRUE(A == B);
+}
+TEST(Matrix, operator_equal2)
+{
+    MyMatrix::SquareMatrix A(3);
+    MyMatrix::SquareMatrix B(3);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[0][2] = 3;
+    A[1][0] = 2;
+    A[1][1] = 4;
+    A[1][2] = 6;
+    A[2][0] = 3;
+    A[2][1] = 6;
+    A[2][2] = 9;
+
+    B[0][0] = 1;
+    B[0][1] = 2;
+    B[0][2] = 3;
+    B[1][0] = 2;
+    B[1][1] = 4;
+    B[1][2] = 6;
+    B[2][0] = 3;
+    B[2][1] = 6;
+    B[2][2] = 8;
+
+    EXPECT_FALSE(A == B);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
