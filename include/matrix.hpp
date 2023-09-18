@@ -132,10 +132,67 @@ namespace MyMatrix
             return true;
         }
 
-        // copy ctr
-        // copy assign
-        // move ctr
-        // move assign
+        Matrix(const Matrix<T> & src) : Matrix<T>(src.strings_num, src.collumns_num)
+        {
+            for(int i = 0; i < strings_num; ++i)
+                for(int j = 0; j < collumns_num; ++j)
+                    (*this)[i][j] = src[i][j];
+        }
+
+        Matrix(Matrix<T> && src)
+        {
+            data = nullptr;
+            std::swap(data, src.data);
+            
+            string_order = nullptr;
+            std::swap(string_order, src.string_order);
+            collumn_order = nullptr;
+            std::swap(collumn_order, src.collumn_order);
+
+            strings_num = src.strings_num;
+            collumns_num = src.collumns_num;
+        }
+
+        Matrix<T>& operator=(const Matrix<T> & src)
+        {
+            delete[] data;
+            delete[] collumn_order;
+            delete[] string_order;
+
+            strings_num = src.strings_num;
+            collumns_num = src.collumns_num;
+
+            data = new T[strings_num * collumns_num];
+            collumn_order = new int[collumns_num];
+            string_order = new int[strings_num];
+
+            for(int i = 0; i < strings_num; ++i)
+                string_order[i] = i;
+            for(int i = 0; i < strings_num; ++i)
+                collumn_order[i] = i;
+
+            for(int i = 0; i < strings_num; ++i)
+                for(int j = 0; j < collumns_num; ++j)
+                    (*this)[i][j] = src[i][j];
+            
+            return *this;
+        }
+
+        Matrix<T>& operator=(Matrix<T> && src)
+        {
+            data = nullptr;
+            std::swap(data, src.data);
+            
+            string_order = nullptr;
+            std::swap(string_order, src.string_order);
+            collumn_order = nullptr;
+            std::swap(collumn_order, src.collumn_order);
+
+            strings_num = src.strings_num;
+            collumns_num = src.collumns_num;
+
+            return *this;
+        }
 
         ~Matrix()
         {

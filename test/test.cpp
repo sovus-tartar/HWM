@@ -141,7 +141,7 @@ TEST(SquareMatrix, eliminate)
     EXPECT_DOUBLE_EQ(A[2][2], 0);
 }
 
-TEST(Matrix, operator_equal1)
+TEST(matrix_base, operator_equal1)
 {
     MyMatrix::SquareMatrix A(3);
     MyMatrix::SquareMatrix B(3);
@@ -167,7 +167,8 @@ TEST(Matrix, operator_equal1)
 
     EXPECT_TRUE(A == B);
 }
-TEST(Matrix, operator_equal2)
+
+TEST(matrix_base, operator_equal2)
 {
     MyMatrix::SquareMatrix A(3);
     MyMatrix::SquareMatrix B(3);
@@ -193,6 +194,88 @@ TEST(Matrix, operator_equal2)
 
     EXPECT_FALSE(A == B);
 }
+
+TEST(matrix_base, operator_equal3)
+{
+    MyMatrix::SquareMatrix A(3);
+    MyMatrix::SquareMatrix B(2);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[0][2] = 3;
+    A[1][0] = 2;
+    A[1][1] = 4;
+    A[1][2] = 6;
+    A[2][0] = 3;
+    A[2][1] = 6;
+    A[2][2] = 9;
+
+    B[0][0] = 1;
+    B[0][1] = 2;
+    B[1][0] = 2;
+    B[1][1] = 4;
+
+
+    EXPECT_FALSE(A == B);
+}
+
+TEST(matrix_base, copy_ctr)
+{
+    MyMatrix::SquareMatrix A(3);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[0][2] = 3;
+    A[1][0] = 2;
+    A[1][1] = 4;
+    A[1][2] = 6;
+    A[2][0] = 3;
+    A[2][1] = 6;
+    A[2][2] = 9;
+
+    MyMatrix::SquareMatrix B(A);
+
+    EXPECT_TRUE(A == B);
+}
+
+TEST(matrix_base, copy_assign1)
+{
+    MyMatrix::SquareMatrix A(3);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[0][2] = 3;
+    A[1][0] = 2;
+    A[1][1] = 4;
+    A[1][2] = 6;
+    A[2][0] = 3;
+    A[2][1] = 6;
+    A[2][2] = 9;
+
+    MyMatrix::SquareMatrix B(2);
+    B = A;
+
+    EXPECT_TRUE(A == B);
+}
+
+TEST(matrix_base, copy_assign2)
+{
+    MyMatrix::SquareMatrix A(3);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[0][2] = 3;
+    A[1][0] = 2;
+    A[1][1] = 4;
+    A[1][2] = 6;
+    A[2][0] = 3;
+    A[2][1] = 6;
+    A[2][2] = 9;
+
+    MyMatrix::SquareMatrix B(3);
+    B = A;
+
+    EXPECT_TRUE(A == B);
+}
+
+
+
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
