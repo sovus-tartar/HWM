@@ -266,7 +266,7 @@ TEST(matrix_base, copy_assign2)
     EXPECT_TRUE(A == B);
 }
 
-TEST(square_matrix, det1)
+TEST(SquareMatrix, det1)
 {
     MyMatrix::SquareMatrix A(2);
     A[0][0] = 1;
@@ -277,7 +277,7 @@ TEST(square_matrix, det1)
     EXPECT_EQ(MyMatrix::SquareMatrix<double>::det(A), -10.0);
 }
 
-TEST(square_matrix, det2)
+TEST(SquareMatrix, det2)
 {
 
     MyMatrix::SquareMatrix A(3);
