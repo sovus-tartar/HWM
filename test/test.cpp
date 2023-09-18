@@ -274,7 +274,16 @@ TEST(matrix_base, copy_assign2)
     EXPECT_TRUE(A == B);
 }
 
+TEST(square_matrix, det1)
+{
+    MyMatrix::SquareMatrix A(2);   
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[1][0] = 3;
+    A[1][1] = -4;
 
+    EXPECT_EQ(MyMatrix::SquareMatrix<double>::det(A), -10.0);
+}
 
 
 int main(int argc, char **argv) {

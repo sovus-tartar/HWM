@@ -62,7 +62,8 @@ namespace MyMatrix
             assert(i < collumns_num);
             assert(j < collumns_num);
 
-            std::swap(collumn_order[i], collumn_order[j]);
+            if(i != j)
+                std::swap(collumn_order[i], collumn_order[j]);
         }
 
         void switch_strings(const int i, const int j)
@@ -70,7 +71,8 @@ namespace MyMatrix
             assert(i < strings_num);
             assert(j < strings_num);
 
-            std::swap(string_order[i], string_order[j]);
+            if(i != j)
+                std::swap(string_order[i], string_order[j]);
         }
 
         proxy_matrix operator[](const int i)
@@ -212,7 +214,7 @@ namespace MyMatrix
     {
     private:
 
-        Point get_pivot_of_submatrix(Point S)
+        Point get_pivot_of_submatrix(const Point S)
         {
             T pivot = 0;
             Point pivot_location = {0, 0};        
@@ -248,9 +250,31 @@ namespace MyMatrix
 
         SquareMatrix(int a_) : Matrix<T>(a_, a_){};
 
-        double det()
+        static double det(const SquareMatrix<T> A) //Is it OK? or I have to overload?
         {
+            SquareMatrix<T> B(A);
+            int change_sign = 0;
 
+            for(int i = 0; i < B.strings_num; ++i)
+            {
+                Point pos = {i, i};
+                Point pivot_location = B.get_pivot_of_submatrix(pos);
+
+                B.switch_collumnes(i, pos.y);
+                B.switch_strings(i, pos.x);
+                
+                change_sign = (i != pos.y) + (i != pos.x);
+                B.eliminate(i);
+            }
+
+            double val = 1.0;
+            for(int i = 0; i < B.strings_num; ++i)
+                val = val * B[i][i];
+
+            if(change_sign % 2 == 1)
+                val = -val;
+
+            return val;
         };
     };
 
