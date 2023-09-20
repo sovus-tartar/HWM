@@ -4,6 +4,10 @@
 
 namespace MyMatrix
 {
+    struct Point
+    {
+        int x, y;
+    };
 
     const double epsilon = 0.000001;
 
@@ -45,6 +49,37 @@ namespace MyMatrix
 
         int strings_num;
         int collumns_num;
+
+        Point get_pivot_of_submatrix(const Point S)
+        {
+            T pivot = 0;
+            Point pivot_location = {0, 0};        
+
+            for (int i = S.x; i < Matrix<T>::strings_num; ++i)
+                for (int j = S.y; j < Matrix<T>::collumns_num; ++j)
+                {
+                    T temp = abs(Matrix<T>::access(i, j));
+                    if (temp > pivot)
+                    {
+                        pivot = temp;
+                        pivot_location = {i, j};
+                    }
+                }
+
+            return pivot_location;
+        };
+
+        void eliminate(int x){
+            T pivot = (*this)[x][x];
+
+            for(int i = x + 1; i < this->strings_num; ++i)
+            {
+                T koef = (*this)[i][x] / pivot;
+
+                for(int j = x; j < this->collumns_num; ++j)
+                    (*this)[i][j] = (*this)[i][j] - (*this)[x][j] * koef;
+            }
+        };
 
         void print()
         {
@@ -100,6 +135,8 @@ namespace MyMatrix
 
             return data[string_order[i] * collumns_num + collumn_order[j]];
         };
+
+        Matrix(int a): Matrix(a, a) {};
 
         Matrix(int a, int b)
         {
@@ -196,63 +233,9 @@ namespace MyMatrix
             return *this;
         }
 
-        ~Matrix()
+        static double det(const Matrix<T> A) //Is it OK? or I have to overload?
         {
-            delete[] data;
-            delete[] collumn_order;
-            delete[] string_order;
-        };
-    };
-
-    struct Point
-    {
-        int x, y;
-    };
-
-    template <typename T = double>
-    class SquareMatrix : public Matrix<T>
-    {
-    private:
-
-        Point get_pivot_of_submatrix(const Point S)
-        {
-            T pivot = 0;
-            Point pivot_location = {0, 0};        
-
-            for (int i = S.x; i < Matrix<T>::strings_num; ++i)
-                for (int j = S.y; j < Matrix<T>::collumns_num; ++j)
-                {
-                    T temp = abs(Matrix<T>::access(i, j));
-                    if (temp > pivot)
-                    {
-                        pivot = temp;
-                        pivot_location = {i, j};
-                    }
-                }
-
-            return pivot_location;
-        };
-
-        void eliminate(int x){
-            T pivot = (*this)[x][x];
-
-            for(int i = x + 1; i < this->strings_num; ++i)
-            {
-                T koef = (*this)[i][x] / pivot;
-
-                for(int j = x; j < this->collumns_num; ++j)
-                    (*this)[i][j] = (*this)[i][j] - (*this)[x][j] * koef;
-            }
-        };
-
-    public:
-        friend class SquareMatrixTest;
-
-        SquareMatrix(int a_) : Matrix<T>(a_, a_){};
-
-        static double det(const SquareMatrix<T> A) //Is it OK? or I have to overload?
-        {
-            SquareMatrix<T> B(A);
+            Matrix<T> B(A);
             int change_sign = 0;
 
             for(int i = 0; i < B.strings_num; ++i)
@@ -276,20 +259,14 @@ namespace MyMatrix
 
             return val;
         };
+    
+        ~Matrix()
+        {
+            delete[] data;
+            delete[] collumn_order;
+            delete[] string_order;
+        };
     };
 
-    class SquareMatrixTest
-    {
-    public:
-        static Point test_pivot(SquareMatrix<double> &A, int i, int j)
-        {
-            Point temp = {i, j};
-            return A.get_pivot_of_submatrix(temp);
-        }
 
-        static void test_eliminate(SquareMatrix<double> &A, int x)
-        {
-            A.eliminate(x);
-        }
-    };
 }

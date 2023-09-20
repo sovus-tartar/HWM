@@ -8,14 +8,14 @@ int main(int argc, char **argv)
 
     std::cin >> N;
 
-    class MyMatrix::SquareMatrix<double> A(N);
+    class MyMatrix::Matrix<double> A(N);
 
     for(int i = 0; i < N; ++i)
         for(int j = 0; j < N; ++j)
             std::cin >> A[i][j];
 
 
-    std::cout << MyMatrix::SquareMatrix<double>::det(A) << std::endl;
+    std::cout << MyMatrix::Matrix<double>::det(A) << std::endl;
 
     return 0;
 }

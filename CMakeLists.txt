@@ -16,7 +16,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
-add_executable(test_HWM ./test/test.cpp)
+add_executable(test_HWM test/test.cpp)
 target_link_libraries(test_HWM GTest::gtest_main)
 gtest_discover_tests(test_HWM)
 
