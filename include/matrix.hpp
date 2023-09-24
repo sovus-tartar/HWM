@@ -181,8 +181,6 @@ namespace MyMatrix
 
         Matrix(int a, int b)
         {
-            std::cout << "Default ctr called\n";
-            
             if(a <= 0)
                 throw std::invalid_argument("a");
             if (a <= 0)
@@ -227,8 +225,6 @@ namespace MyMatrix
 
         Matrix(const Matrix<T> & src) : Matrix<T>(src.strings_num, src.collumns_num)
         {
-            std::cout << "called copy ctr\n";
-
             for(int i = 0; i < strings_num; ++i)
                 for(int j = 0; j < collumns_num; ++j)
                     (*this)[i][j] = src[i][j];
@@ -236,10 +232,11 @@ namespace MyMatrix
 
         Matrix(Matrix<T> && src)
         {
-            std::cout << "called move ctr\n";
-
+            data = nullptr;
             std::swap(data, src.data);
+            string_order = nullptr;
             std::swap(string_order, src.string_order);
+            collumn_order = nullptr;
             std::swap(collumn_order, src.collumn_order);
 
             strings_num = src.strings_num;
@@ -248,8 +245,6 @@ namespace MyMatrix
 
         Matrix<T>& operator=(const Matrix<T> & src)
         {
-            std::cout << "called copy assign\n";
-
             T * data_temp;
             int * collumn_order_temp;
             int  * string_order_temp;
@@ -291,7 +286,6 @@ namespace MyMatrix
 
         Matrix<T>& operator=(Matrix<T> && src)
         {
-            std::cout << "called move assign\n";
 
             std::swap(data, src.data);
             std::swap(string_order, src.string_order);

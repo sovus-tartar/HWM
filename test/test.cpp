@@ -4,7 +4,7 @@
 
 #include "../include/matrix.hpp"
 
-TEST(matrix_base, init_test)
+TEST(Matrix, ctr)
 {
     MyMatrix::Matrix<double> A(2, 3);
 
@@ -23,7 +23,7 @@ TEST(matrix_base, init_test)
     EXPECT_DOUBLE_EQ(A[1][2], 6.0);
 }
 
-TEST(matrix_base, switch_collumnes)
+TEST(Matrix, switch_collumnes)
 {
 
     MyMatrix::Matrix<double> A(2, 3);
@@ -47,7 +47,7 @@ TEST(matrix_base, switch_collumnes)
     EXPECT_DOUBLE_EQ(A[1][2], 4.0);
 }
 
-TEST(matrix_base, switch_lines)
+TEST(Matrix, switch_lines)
 {
     MyMatrix::Matrix<double> A(2, 3);
 
@@ -138,7 +138,7 @@ TEST(Matrix, eliminate)
     EXPECT_DOUBLE_EQ(A[2][2], 0);
 }
 
-TEST(matrix_base, operator_equal1)
+TEST(Matrix, operator_equal1)
 {
     MyMatrix::Matrix A(3);
     MyMatrix::Matrix B(3);
@@ -165,7 +165,7 @@ TEST(matrix_base, operator_equal1)
     EXPECT_TRUE(A == B);
 }
 
-TEST(matrix_base, operator_equal2)
+TEST(Matrix, operator_equal2)
 {
     MyMatrix::Matrix A(3);
     MyMatrix::Matrix B(3);
@@ -192,7 +192,7 @@ TEST(matrix_base, operator_equal2)
     EXPECT_FALSE(A == B);
 }
 
-TEST(matrix_base, operator_equal3)
+TEST(Matrix, operator_equal3)
 {
     MyMatrix::Matrix A(3);
     MyMatrix::Matrix B(2);
@@ -214,7 +214,7 @@ TEST(matrix_base, operator_equal3)
     EXPECT_FALSE(A == B);
 }
 
-TEST(matrix_base, copy_ctr)
+TEST(Matrix, copy_ctr)
 {
     MyMatrix::Matrix A(3);
     A[0][0] = 1;
@@ -232,7 +232,7 @@ TEST(matrix_base, copy_ctr)
     EXPECT_TRUE(A == B);
 }
 
-TEST(matrix_base, copy_assign1)
+TEST(Matrix, copy_assign1)
 {
     MyMatrix::Matrix A(3);
     A[0][0] = 1;
@@ -251,7 +251,7 @@ TEST(matrix_base, copy_assign1)
     EXPECT_TRUE(A == B);
 }
 
-TEST(matrix_base, copy_assign2)
+TEST(Matrix, copy_assign2)
 {
     MyMatrix::Matrix A(3);
     A[0][0] = 1;
@@ -429,7 +429,7 @@ TEST(Matrix, cast_to_double_and_move_assign)
     A[1][0] = 2;
     A[1][1] = 3;
 
-    MyMatrix::Matrix<double> B = static_cast<MyMatrix::Matrix<double>>(A);
+    MyMatrix::Matrix<double> B = std::move(static_cast<MyMatrix::Matrix<double>>(A));
 
     EXPECT_DOUBLE_EQ(B[0][0], 0);
     EXPECT_DOUBLE_EQ(B[0][1], 1);
@@ -447,7 +447,7 @@ TEST(Matrix, cast_to_double_and_move_ctr)
     A[1][0] = 2;
     A[1][1] = 3;
 
-    MyMatrix::Matrix<double> B(static_cast<MyMatrix::Matrix<double>>(A));
+    MyMatrix::Matrix<double> B(std::move(static_cast<MyMatrix::Matrix<double>>(A)));
 
     EXPECT_DOUBLE_EQ(B[0][0], 0);
     EXPECT_DOUBLE_EQ(B[0][1], 1);
