@@ -1,6 +1,8 @@
 #include <iostream>
 #include "../include/matrix.hpp"
 
+//TODO: better tests for ctors
+
 int main(int argc, char **argv)
 {
     
@@ -16,6 +18,7 @@ int main(int argc, char **argv)
 
 
     std::cout << MyMatrix::Matrix<double>::det(A) << std::endl;
+
 
     return 0;
 }

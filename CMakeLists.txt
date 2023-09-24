@@ -31,6 +31,7 @@ add_compile_options(
     -Wenum-compare
     -Wfloat-equal
     -Wnon-virtual-dtor
+    -O0
 )
 
 

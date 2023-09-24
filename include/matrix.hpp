@@ -50,6 +50,28 @@ namespace MyMatrix
         int strings_num;
         int collumns_num;
 
+        Matrix<T> transpose() 
+        {
+            Matrix<T> B(collumns_num, strings_num);
+
+            for(int i = 0; i < strings_num; ++i)
+                for(int j = 0; j < collumns_num; ++j)
+                    B[j][i] = access(i, j);
+
+            return B;
+        }
+
+        operator Matrix<double>() const 
+        {
+            Matrix<double> B(strings_num, collumns_num);
+
+            for(int i = 0; i < strings_num; ++i)
+                for(int j = 0; j < collumns_num; ++j)
+                    B[i][j] = static_cast<double>(access(i, j));
+
+            return B;
+        }
+
         Point get_pivot_of_submatrix(const Point S)
         {
             T pivot = 0;
@@ -140,6 +162,7 @@ namespace MyMatrix
 
         Matrix(int a, int b)
         {
+            std::cout << "Default ctr called\n";
             assert(a > 0);
             assert(b > 0);
 
@@ -173,6 +196,8 @@ namespace MyMatrix
 
         Matrix(const Matrix<T> & src) : Matrix<T>(src.strings_num, src.collumns_num)
         {
+            std::cout << "called copy ctr\n";
+
             for(int i = 0; i < strings_num; ++i)
                 for(int j = 0; j < collumns_num; ++j)
                     (*this)[i][j] = src[i][j];
@@ -180,6 +205,8 @@ namespace MyMatrix
 
         Matrix(Matrix<T> && src)
         {
+            std::cout << "called move ctr\n";
+
             data = nullptr;
             std::swap(data, src.data);
             
@@ -194,6 +221,8 @@ namespace MyMatrix
 
         Matrix<T>& operator=(const Matrix<T> & src)
         {
+            std::cout << "called copy assign\n";
+
             delete[] data;
             delete[] collumn_order;
             delete[] string_order;
@@ -207,7 +236,7 @@ namespace MyMatrix
 
             for(int i = 0; i < strings_num; ++i)
                 string_order[i] = i;
-            for(int i = 0; i < strings_num; ++i)
+            for(int i = 0; i < collumns_num; ++i)
                 collumn_order[i] = i;
 
             for(int i = 0; i < strings_num; ++i)
@@ -219,6 +248,8 @@ namespace MyMatrix
 
         Matrix<T>& operator=(Matrix<T> && src)
         {
+            std::cout << "called move assign\n";
+
             data = nullptr;
             std::swap(data, src.data);
             
@@ -235,7 +266,7 @@ namespace MyMatrix
 
         static double det(const Matrix<T> A) //Is it OK? or I have to overload?
         {
-            Matrix<T> B(A);
+            Matrix<double> B(A);
             int change_sign = 0;
 
             for(int i = 0; i < B.strings_num; ++i)

@@ -396,6 +396,67 @@ TEST(Matrix, det6)
     EXPECT_NEAR(MyMatrix::Matrix<double>::det(A), expected_det, 0.00000001);
 }
 
+TEST(Matrix, det_int)
+{
+    std::ifstream file;
+
+    file.open("../test/555_int.in");
+
+    int N;
+    file >> N;
+
+    MyMatrix::Matrix<int> A(N);
+
+    for (int i = 0; i < N; ++i)
+        for (int j = 0; j < N; ++j)
+            file >> A[i][j];
+
+    double expected_det;
+
+    file >> expected_det;
+
+    file.close();
+
+    EXPECT_NEAR(expected_det, MyMatrix::Matrix<int>::det(A), 0.000000000001);
+}
+
+TEST(Matrix, cast_to_double_and_move_assign)
+{
+    MyMatrix::Matrix<int> A(2);
+
+    A[0][0] = 0;
+    A[0][1] = 1;
+    A[1][0] = 2;
+    A[1][1] = 3;
+
+    MyMatrix::Matrix<double> B = static_cast<MyMatrix::Matrix<double>>(A);
+
+    EXPECT_DOUBLE_EQ(B[0][0], 0);
+    EXPECT_DOUBLE_EQ(B[0][1], 1);
+    EXPECT_DOUBLE_EQ(B[1][0], 2);
+    EXPECT_DOUBLE_EQ(B[1][1], 3);
+
+}
+
+TEST(Matrix, cast_to_double_and_move_ctr)
+{
+    MyMatrix::Matrix<int> A(2);
+
+    A[0][0] = 0;
+    A[0][1] = 1;
+    A[1][0] = 2;
+    A[1][1] = 3;
+
+    MyMatrix::Matrix<double> B(static_cast<MyMatrix::Matrix<double>>(A));
+
+    EXPECT_DOUBLE_EQ(B[0][0], 0);
+    EXPECT_DOUBLE_EQ(B[0][1], 1);
+    EXPECT_DOUBLE_EQ(B[1][0], 2);
+    EXPECT_DOUBLE_EQ(B[1][1], 3);
+
+}
+
+
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
