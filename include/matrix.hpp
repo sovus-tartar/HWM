@@ -2,6 +2,8 @@
 #include <cassert>
 #include <cstdlib>
 
+
+
 namespace MyMatrix
 {
     struct Point
@@ -50,7 +52,7 @@ namespace MyMatrix
         int strings_num;
         int collumns_num;
 
-        Matrix<T> transpose() 
+        Matrix<T> transpose()
         {
             Matrix<T> B(collumns_num, strings_num);
 
@@ -74,6 +76,11 @@ namespace MyMatrix
 
         Point get_pivot_of_submatrix(const Point S)
         {
+            if(S.x >= strings_num)
+                throw std::invalid_argument("S.x");
+            if (S.y >= collumns_num)
+                throw std::invalid_argument("S.y");
+
             T pivot = 0;
             Point pivot_location = {0, 0};        
 
@@ -91,7 +98,11 @@ namespace MyMatrix
             return pivot_location;
         };
 
-        void eliminate(int x){
+        void eliminate(int x)
+        {
+            if(x >= strings_num)
+                throw std::invalid_argument("x");
+
             T pivot = (*this)[x][x];
 
             for(int i = x + 1; i < this->strings_num; ++i)
@@ -116,8 +127,10 @@ namespace MyMatrix
 
         void switch_collumnes(const int i, const int j)
         {
-            assert(i < collumns_num);
-            assert(j < collumns_num);
+            if(i >= strings_num)
+                throw std::invalid_argument("i");
+            if (j >= collumns_num)
+                throw std::invalid_argument("j");
 
             if(i != j)
                 std::swap(collumn_order[i], collumn_order[j]);
@@ -125,8 +138,10 @@ namespace MyMatrix
 
         void switch_strings(const int i, const int j)
         {
-            assert(i < strings_num);
-            assert(j < strings_num);
+            if(i >= strings_num)
+                throw std::invalid_argument("i");
+            if (j >= collumns_num)
+                throw std::invalid_argument("j");
 
             if(i != j)
                 std::swap(string_order[i], string_order[j]);
@@ -144,16 +159,20 @@ namespace MyMatrix
 
         T &access(int i, int j)
         {
-            assert(i < strings_num);
-            assert(j < collumns_num);
+            if(i >= strings_num)
+                throw std::invalid_argument("i");
+            if (j >= collumns_num)
+                throw std::invalid_argument("j");
 
             return data[string_order[i] * collumns_num + collumn_order[j]];
         };
 
         const T &access(int i, int j) const
         {
-            assert(i < strings_num);
-            assert(j < collumns_num);
+            if(i >= strings_num)
+                throw std::invalid_argument("i");
+            if (j >= collumns_num)
+                throw std::invalid_argument("j");
 
             return data[string_order[i] * collumns_num + collumn_order[j]];
         };
@@ -163,12 +182,24 @@ namespace MyMatrix
         Matrix(int a, int b)
         {
             std::cout << "Default ctr called\n";
-            assert(a > 0);
-            assert(b > 0);
+            
+            if(a <= 0)
+                throw std::invalid_argument("a");
+            if (a <= 0)
+                throw std::invalid_argument("b");
 
-            data = new T[a * b];
-            string_order = new int[a];
-            collumn_order = new int[b];
+            try
+            {
+                data = new T[a * b];
+                string_order = new int[a];
+                collumn_order = new int[b];
+            }
+            catch(std::bad_alloc& exc)
+            {   
+                std::cerr << exc.what() << std::endl;
+                std::terminate();
+            }
+
 
             for (int i = 0; i < a; ++i)
                 string_order[i] = i;
@@ -207,12 +238,8 @@ namespace MyMatrix
         {
             std::cout << "called move ctr\n";
 
-            data = nullptr;
             std::swap(data, src.data);
-            
-            string_order = nullptr;
             std::swap(string_order, src.string_order);
-            collumn_order = nullptr;
             std::swap(collumn_order, src.collumn_order);
 
             strings_num = src.strings_num;
@@ -223,16 +250,32 @@ namespace MyMatrix
         {
             std::cout << "called copy assign\n";
 
+            T * data_temp;
+            int * collumn_order_temp;
+            int  * string_order_temp;
+
+            try
+            {
+                data_temp = new T[src.strings_num * src.collumns_num];
+                collumn_order_temp = new int[src.collumns_num];
+                string_order_temp = new int[src.strings_num];
+            }
+            catch(const std::exception& e)
+            {
+                std::cout << e.what() << std::endl << "Copy assign failed, exiting..." << std::endl;
+                return *this;
+            }
+            
             delete[] data;
             delete[] collumn_order;
             delete[] string_order;
 
+            data = data_temp;
+            collumn_order = collumn_order_temp;
+            string_order = string_order_temp;
+
             strings_num = src.strings_num;
             collumns_num = src.collumns_num;
-
-            data = new T[strings_num * collumns_num];
-            collumn_order = new int[collumns_num];
-            string_order = new int[strings_num];
 
             for(int i = 0; i < strings_num; ++i)
                 string_order[i] = i;
@@ -250,12 +293,8 @@ namespace MyMatrix
         {
             std::cout << "called move assign\n";
 
-            data = nullptr;
             std::swap(data, src.data);
-            
-            string_order = nullptr;
             std::swap(string_order, src.string_order);
-            collumn_order = nullptr;
             std::swap(collumn_order, src.collumn_order);
 
             strings_num = src.strings_num;
@@ -264,7 +303,16 @@ namespace MyMatrix
             return *this;
         }
 
-        static double det(const Matrix<T> A) //Is it OK? or I have to overload?
+        ~Matrix()
+        {
+            delete[] data;
+            delete[] collumn_order;
+            delete[] string_order;
+        };
+    };
+
+    template <typename T>
+    double det(const Matrix<T> A)
         {
             Matrix<double> B(A);
             int change_sign = 0;
@@ -290,14 +338,4 @@ namespace MyMatrix
 
             return val;
         };
-    
-        ~Matrix()
-        {
-            delete[] data;
-            delete[] collumn_order;
-            delete[] string_order;
-        };
-    };
-
-
 }

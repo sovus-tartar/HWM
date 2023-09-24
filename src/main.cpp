@@ -1,11 +1,10 @@
 #include <iostream>
 #include "../include/matrix.hpp"
 
-//TODO: better tests for ctors
+// TODO: better tests for ctors
 
 int main(int argc, char **argv)
 {
-    
     int N;
 
     std::cin >> N;
@@ -17,8 +16,7 @@ int main(int argc, char **argv)
             std::cin >> A[i][j];
 
 
-    std::cout << MyMatrix::Matrix<double>::det(A) << std::endl;
-
+    std::cout << MyMatrix::det(A) << std::endl;
 
     return 0;
 }

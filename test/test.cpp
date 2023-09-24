@@ -278,7 +278,7 @@ TEST(Matrix, det1)
     A[1][0] = 3;
     A[1][1] = -4;
 
-    EXPECT_EQ(MyMatrix::Matrix<double>::det(A), -10.0);
+    EXPECT_EQ(MyMatrix::det(A), -10.0);
 }
 
 TEST(Matrix, det2)
@@ -295,7 +295,7 @@ TEST(Matrix, det2)
     A[2][1] = 0;
     A[2][2] = 9;
 
-    EXPECT_EQ(MyMatrix::Matrix<double>::det(A), 36.0);
+    EXPECT_EQ(MyMatrix::det(A), 36.0);
 }
 
 TEST(Matrix, det3)
@@ -319,7 +319,7 @@ TEST(Matrix, det3)
 
     file.close();
 
-    EXPECT_NEAR(MyMatrix::Matrix<double>::det(A), expected_det, 1);
+    EXPECT_NEAR(MyMatrix::det(A), expected_det, 1);
 }
 
 TEST(Matrix, det4)
@@ -345,7 +345,7 @@ TEST(Matrix, det4)
 
     
 
-    EXPECT_NEAR(MyMatrix::Matrix<double>::det(A), expected_det, 0.000000001);
+    EXPECT_NEAR(MyMatrix::det(A), expected_det, 0.000000001);
 }
 
 TEST(Matrix, det5)
@@ -369,7 +369,7 @@ TEST(Matrix, det5)
 
     file.close();
 
-    EXPECT_NEAR(MyMatrix::Matrix<double>::det(A), expected_det, 0.00000001);
+    EXPECT_NEAR(MyMatrix::det(A), expected_det, 0.00000001);
 }
 
 TEST(Matrix, det6)
@@ -393,7 +393,7 @@ TEST(Matrix, det6)
 
     file.close();
 
-    EXPECT_NEAR(MyMatrix::Matrix<double>::det(A), expected_det, 0.00000001);
+    EXPECT_NEAR(MyMatrix::det(A), expected_det, 0.00000001);
 }
 
 TEST(Matrix, det_int)
@@ -417,7 +417,7 @@ TEST(Matrix, det_int)
 
     file.close();
 
-    EXPECT_NEAR(expected_det, MyMatrix::Matrix<int>::det(A), 0.000000000001);
+    EXPECT_NEAR(expected_det, MyMatrix::det(A), 0.000000000001);
 }
 
 TEST(Matrix, cast_to_double_and_move_assign)
@@ -454,6 +454,104 @@ TEST(Matrix, cast_to_double_and_move_ctr)
     EXPECT_DOUBLE_EQ(B[1][0], 2);
     EXPECT_DOUBLE_EQ(B[1][1], 3);
 
+}
+
+TEST(Matrix, exception_access1)
+{
+    MyMatrix::Matrix A(3);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[0][2] = 3;
+    A[1][0] = 2;
+    A[1][1] = 4;
+    A[1][2] = 6;
+    A[2][0] = 3;
+    A[2][1] = 6;
+    A[2][2] = 9;
+
+    EXPECT_THROW(A[4][5], std::invalid_argument);
+}
+
+TEST(Matrix, exception_access2)
+{
+    MyMatrix::Matrix A(3);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[0][2] = 3;
+    A[1][0] = 2;
+    A[1][1] = 4;
+    A[1][2] = 6;
+    A[2][0] = 3;
+    A[2][1] = 6;
+    A[2][2] = 9;
+
+    EXPECT_THROW(A.access(4, 5), std::invalid_argument);
+}
+
+TEST(Matrix, exception_switch_str)
+{
+    MyMatrix::Matrix A(3);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[0][2] = 3;
+    A[1][0] = 2;
+    A[1][1] = 4;
+    A[1][2] = 6;
+    A[2][0] = 3;
+    A[2][1] = 6;
+    A[2][2] = 9;
+
+    EXPECT_THROW(A.switch_strings(1, 4), std::invalid_argument);
+}
+
+TEST(Matrix, exception_switch_col)
+{
+    MyMatrix::Matrix A(3);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[0][2] = 3;
+    A[1][0] = 2;
+    A[1][1] = 4;
+    A[1][2] = 6;
+    A[2][0] = 3;
+    A[2][1] = 6;
+    A[2][2] = 9; 
+
+    EXPECT_THROW(A.switch_collumnes(1, 4), std::invalid_argument);   
+}
+
+TEST(Matrix, exception_elliminate)
+{
+    MyMatrix::Matrix A(3);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[0][2] = 3;
+    A[1][0] = 2;
+    A[1][1] = 4;
+    A[1][2] = 6;
+    A[2][0] = 3;
+    A[2][1] = 6;
+    A[2][2] = 9;    
+
+    EXPECT_THROW(A.eliminate(4), std::invalid_argument);   
+}
+
+TEST(Matrix, exception_find_pivot)
+{
+    MyMatrix::Matrix A(3);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[0][2] = 3;
+    A[1][0] = 2;
+    A[1][1] = 4;
+    A[1][2] = 6;
+    A[2][0] = 3;
+    A[2][1] = 6;
+    A[2][2] = 9;    
+
+    MyMatrix::Point S = {5, 5};
+
+    EXPECT_THROW(A.get_pivot_of_submatrix(S), std::invalid_argument);   
 }
 
 
