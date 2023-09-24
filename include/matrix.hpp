@@ -194,7 +194,7 @@ namespace MyMatrix
             }
             catch(std::bad_alloc& exc)
             {   
-                std::cerr << exc.what() << std::endl;
+                std::cerr << exc.what() << std::endl << "Initializing Matrix object failed, exiting..." << std::endl;
                 std::terminate();
             }
 
