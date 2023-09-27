@@ -8,7 +8,7 @@ def print_matrix_cpp_style(n: int, A : list):
 
     for i in range(n):
         for j in range(n):
-            print(int(A[i][j]), end = ' ')
+            print(round(A[i][j], 6), end = ' ')
         print()
 
 

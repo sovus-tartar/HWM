@@ -107,6 +107,7 @@ namespace MyMatrix
 
             for(int i = x + 1; i < this->strings_num; ++i)
             {
+                
                 T koef = (*this)[i][x] / pivot;
 
                 for(int j = x; j < this->collumns_num; ++j)
@@ -127,7 +128,7 @@ namespace MyMatrix
 
         void switch_collumnes(const int i, const int j)
         {
-            if(i >= strings_num)
+            if(i >= collumns_num)
                 throw std::invalid_argument("i");
             if (j >= collumns_num)
                 throw std::invalid_argument("j");
@@ -305,6 +306,7 @@ namespace MyMatrix
         };
     };
 
+    //specialize only for n*n matrixes
     template <typename T>
     double det(const Matrix<T> A)
         {
@@ -312,21 +314,25 @@ namespace MyMatrix
             int change_sign = 0;
 
             for(int i = 0; i < B.strings_num; ++i)
-            {
-                Point pos = {i, i};
-                Point pivot_location = B.get_pivot_of_submatrix(pos);
+            {   
 
-                B.switch_collumnes(i, pos.y);
-                B.switch_strings(i, pos.x);
-                
-                change_sign = (i != pos.y) + (i != pos.x);
+                Point pos = {i, i};
+                Point pivot_location = B.get_pivot_of_submatrix(pos); //add find max
+
+                B.switch_collumnes(pivot_location.y, pos.y);
+                B.switch_strings(pivot_location.x, pos.x);
+
+                change_sign += (pivot_location.y != pos.y) + (pivot_location.x != pos.x);
                 B.eliminate(i);
+
             }
 
             double val = 1.0;
             for(int i = 0; i < B.strings_num; ++i)
+            {
                 val = val * B[i][i];
-
+            }
+            
             if(change_sign % 2 == 1)
                 val = -val;
 
