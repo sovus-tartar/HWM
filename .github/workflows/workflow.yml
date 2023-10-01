@@ -1,0 +1,25 @@
+name: HWM pre-commit and post-push
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: Install required compiler to be sure
+      run: sudo apt-get install g++-12      
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: CMake debug config
+      run: cmake -S . -B debug -DCMAKE_CXX_COMPILER=g++-12 -DCMAKE_BUILD_TYPE=Release
+    - name: CMake debug build
+      run: cmake --build debug
+    - name: CMake debug test
+      run: env CTEST_OUTPUT_ON_FAILURE=1 cmake --build debug --target test

@@ -77,9 +77,9 @@ namespace MyMatrix
         Point get_pivot_of_submatrix(const Point S)
         {
             if(S.x >= strings_num)
-                throw std::invalid_argument("S.x");
+                throw std::invalid_argument("MyMatrix::Matrix::get_pivot_of_submatrix - S.x is out of range");
             if (S.y >= collumns_num)
-                throw std::invalid_argument("S.y");
+                throw std::invalid_argument("MyMatrix::Matrix::get_pivot_of_submatrix - S.y is out of range");
 
             T pivot = 0;
             Point pivot_location = {0, 0};        
@@ -101,7 +101,7 @@ namespace MyMatrix
         void eliminate(int x)
         {
             if(x >= strings_num)
-                throw std::invalid_argument("x");
+                throw std::invalid_argument("MyMatrix::Matrix::eliminate - x is out of range of matrix");
 
             T pivot = (*this)[x][x];
 
@@ -129,9 +129,9 @@ namespace MyMatrix
         void switch_collumnes(const int i, const int j)
         {
             if(i >= collumns_num)
-                throw std::invalid_argument("i");
+                throw std::invalid_argument("MyMatrix::Matrix::switch_collumnes - i argument is out of range");
             if (j >= collumns_num)
-                throw std::invalid_argument("j");
+                throw std::invalid_argument("MyMatrix::Matrix::switch_collumnes - j argument is out of range");
 
             if(i != j)
                 std::swap(collumn_order[i], collumn_order[j]);
@@ -140,9 +140,9 @@ namespace MyMatrix
         void switch_strings(const int i, const int j)
         {
             if(i >= strings_num)
-                throw std::invalid_argument("i");
+                throw std::invalid_argument("MyMatrix::Matrix::switch_strings - i argument is out of range");
             if (j >= collumns_num)
-                throw std::invalid_argument("j");
+                throw std::invalid_argument("MyMatrix::Matrix::switch_strings - j argument is out of range");
 
             if(i != j)
                 std::swap(string_order[i], string_order[j]);
@@ -161,9 +161,9 @@ namespace MyMatrix
         T &access(int i, int j)
         {
             if(i >= strings_num)
-                throw std::invalid_argument("i");
+                throw std::invalid_argument("MyMatrix::Matrix::access - i argument is out of range");
             if (j >= collumns_num)
-                throw std::invalid_argument("j");
+                throw std::invalid_argument("MyMatrix::Matrix::access - j argument is out of range");
 
             return data[string_order[i] * collumns_num + collumn_order[j]];
         };
@@ -171,9 +171,9 @@ namespace MyMatrix
         const T &access(int i, int j) const
         {
             if(i >= strings_num)
-                throw std::invalid_argument("i");
+                throw std::invalid_argument("MyMatrix::Matrix::access - i argument is out of range");
             if (j >= collumns_num)
-                throw std::invalid_argument("j");
+                throw std::invalid_argument("MyMatrix::Matrix::access - j argument is out of range");
 
             return data[string_order[i] * collumns_num + collumn_order[j]];
         };
@@ -183,9 +183,9 @@ namespace MyMatrix
         Matrix(int a, int b)
         {
             if(a <= 0)
-                throw std::invalid_argument("a");
+                throw std::invalid_argument("MyMatrix::Matrix::Matrix - a is less than 0");
             if (a <= 0)
-                throw std::invalid_argument("b");
+                throw std::invalid_argument("MyMatrix::Matrix::Matrix - b is less than 0");
 
             try
             {
@@ -310,6 +310,9 @@ namespace MyMatrix
     template <typename T>
     double det(const Matrix<T> A)
         {
+            if(A.strings_num != A.collumns_num)
+                throw std::invalid_argument("MyMatrix::det - passed matrix is not n*n");
+
             Matrix<double> B(A);
             int change_sign = 0;
 
