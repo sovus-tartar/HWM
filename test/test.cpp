@@ -1,8 +1,9 @@
 #include <gtest/gtest.h>
 #include <iostream>
 #include <fstream>
+#include <chrono>
 
-#include "../include/matrix.hpp"
+#include <matrix.hpp>
 
 TEST(Matrix, ctr)
 {
@@ -270,6 +271,24 @@ TEST(Matrix, copy_assign2)
     EXPECT_TRUE(A == B);
 }
 
+TEST(Matrix, copy_assign3)
+{
+    MyMatrix::Matrix A(3);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[0][2] = 3;
+    A[1][0] = 2;
+    A[1][1] = 4;
+    A[1][2] = 6;
+    A[2][0] = 3;
+    A[2][1] = 6;
+    A[2][2] = 9;
+
+    A = A;
+
+    EXPECT_TRUE(A == A);
+}
+
 TEST(Matrix, det1)
 {
     MyMatrix::Matrix A(2);
@@ -302,7 +321,7 @@ TEST(Matrix, det3)
 {
     std::ifstream file;
 
-    file.open("../test/111.in");
+    file.open("../../test/111.in");
 
     int N;
     file >> N;
@@ -326,7 +345,7 @@ TEST(Matrix, det4)
 {
     std::ifstream file;
 
-    file.open("../test/222.in");
+    file.open("../../test/222.in");
 
     int N;
     file >> N;
@@ -352,7 +371,7 @@ TEST(Matrix, det5)
 {
     std::ifstream file;
 
-    file.open("../test/333.in");
+    file.open("../../test/333.in");
 
     int N;
     file >> N;
@@ -376,7 +395,7 @@ TEST(Matrix, det6)
 {
     std::ifstream file;
 
-    file.open("../test/444.in");
+    file.open("../../test/444.in");
 
     int N;
     file >> N;
@@ -400,7 +419,7 @@ TEST(Matrix, det_int)
 {
     std::ifstream file;
 
-    file.open("../test/555_int.in");
+    file.open("../../test/555_int.in");
 
     int N;
     file >> N;

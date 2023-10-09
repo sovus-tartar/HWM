@@ -1,8 +1,9 @@
+#pragma once
+
 #include <iostream>
 #include <cassert>
 #include <cstdlib>
-
-
+#include <cmath>
 
 namespace MyMatrix
 {
@@ -250,6 +251,9 @@ namespace MyMatrix
             int * collumn_order_temp;
             int  * string_order_temp;
 
+            if(this == &src)
+                return *this;
+
             try
             {
                 data_temp = new T[src.strings_num * src.collumns_num];
@@ -287,6 +291,8 @@ namespace MyMatrix
 
         Matrix<T>& operator=(Matrix<T> && src)
         {
+            if(this == &src)
+                return *this;
 
             std::swap(data, src.data);
             std::swap(string_order, src.string_order);
@@ -311,7 +317,7 @@ namespace MyMatrix
     double det(const Matrix<T> A)
         {
             if(A.strings_num != A.collumns_num)
-                throw std::invalid_argument("MyMatrix::det - passed matrix is not n*n");
+                throw std::invalid_argument("MyMatrix::det - matrix is not n*n");
 
             Matrix<double> B(A);
             int change_sign = 0;
@@ -324,10 +330,8 @@ namespace MyMatrix
 
                 B.switch_collumnes(pivot_location.y, pos.y);
                 B.switch_strings(pivot_location.x, pos.x);
-
                 change_sign += (pivot_location.y != pos.y) + (pivot_location.x != pos.x);
                 B.eliminate(i);
-
             }
 
             double val = 1.0;
@@ -336,6 +340,7 @@ namespace MyMatrix
                 val = val * B[i][i];
             }
             
+
             if(change_sign % 2 == 1)
                 val = -val;
 
