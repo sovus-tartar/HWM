@@ -18,7 +18,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
-add_subdirectory(test)
+add_subdirectory(./test)
 
 add_executable(HWM ./src/main.cpp)
 
