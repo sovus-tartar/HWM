@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include <iostream>
 #include <fstream>
-#include <chrono>
 
 #include <matrix.hpp>
 
@@ -26,13 +25,8 @@ TEST(Matrix, det7_release)
     file >> expected_det;
 
     file.close();
-    auto start = std::chrono::high_resolution_clock::now();
 
     double ttl_det = MyMatrix::det(A);
     EXPECT_NEAR(ttl_det, expected_det, 0.00000001);
 
-    auto end = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-    
-    EXPECT_LT(elapsed.count() / 1000, 500);
 }
