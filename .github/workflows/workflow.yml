@@ -14,17 +14,17 @@ jobs:
         shell: bash
     steps:
     - name: Install required compiler to be sure
-      run: sudo apt-get install g++-12      
+      run: sudo apt-get install clang      
     - name: Checkout repository
       uses: actions/checkout@v3
     - name: CMake debug config
-      run: cmake -S . -B debug -DCMAKE_CXX_COMPILER=clang -DCMAKE_BUILD_TYPE=Debug
+      run: cmake -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_BUILD_TYPE=Debug -S . -B debug
     - name: CMake debug build
       run: cmake --build debug
     - name: CMake debug test
       run: env CTEST_OUTPUT_ON_FAILURE=1 cmake --build debug --target test
     - name: CMake release config
-      run: cmake -S . -B debug -DCMAKE_CXX_COMPILER=clang -DCMAKE_BUILD_TYPE=Release
+      run: cmake -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_BUILD_TYPE=Release -S . -B release 
     - name: CMake release build
       run: cmake --build release
     - name: CMake release test

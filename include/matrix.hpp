@@ -53,7 +53,7 @@ namespace MyMatrix
         int strings_num;
         int collumns_num;
 
-        Matrix<T> transpose()
+        Matrix<T> transpose() const  //better Matrix& transpose() &
         {
             Matrix<T> B(collumns_num, strings_num);
 
@@ -130,9 +130,9 @@ namespace MyMatrix
         void switch_collumnes(const int i, const int j)
         {
             if(i >= collumns_num)
-                throw std::invalid_argument("MyMatrix::Matrix::switch_collumnes - i argument is out of range");
+                throw std::out_of_range("MyMatrix::Matrix::switch_collumnes - i argument is out of range");
             if (j >= collumns_num)
-                throw std::invalid_argument("MyMatrix::Matrix::switch_collumnes - j argument is out of range");
+                throw std::out_of_range("MyMatrix::Matrix::switch_collumnes - j argument is out of range");
 
             if(i != j)
                 std::swap(collumn_order[i], collumn_order[j]);
@@ -141,9 +141,9 @@ namespace MyMatrix
         void switch_strings(const int i, const int j)
         {
             if(i >= strings_num)
-                throw std::invalid_argument("MyMatrix::Matrix::switch_strings - i argument is out of range");
+                throw std::out_of_range("MyMatrix::Matrix::switch_strings - i argument is out of range");
             if (j >= collumns_num)
-                throw std::invalid_argument("MyMatrix::Matrix::switch_strings - j argument is out of range");
+                throw std::out_of_range("MyMatrix::Matrix::switch_strings - j argument is out of range");
 
             if(i != j)
                 std::swap(string_order[i], string_order[j]);
@@ -232,7 +232,7 @@ namespace MyMatrix
                     (*this)[i][j] = src[i][j];
         }
 
-        Matrix(Matrix<T> && src)
+        Matrix(Matrix<T> && src) noexcept
         {
             data = nullptr;
             std::swap(data, src.data);
@@ -289,7 +289,7 @@ namespace MyMatrix
             return *this;
         }
 
-        Matrix<T>& operator=(Matrix<T> && src)
+        Matrix<T>& operator=(Matrix<T> && src) noexcept
         {
             if(this == &src)
                 return *this;

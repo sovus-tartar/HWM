@@ -520,7 +520,7 @@ TEST(Matrix, exception_switch_str)
     A[2][1] = 6;
     A[2][2] = 9;
 
-    EXPECT_THROW(A.switch_strings(1, 4), std::invalid_argument);
+    EXPECT_THROW(A.switch_strings(1, 4), std::out_of_range);
 }
 
 TEST(Matrix, exception_switch_col)
@@ -536,7 +536,7 @@ TEST(Matrix, exception_switch_col)
     A[2][1] = 6;
     A[2][2] = 9; 
 
-    EXPECT_THROW(A.switch_collumnes(1, 4), std::invalid_argument);   
+    EXPECT_THROW(A.switch_collumnes(1, 4), std::out_of_range);   
 }
 
 TEST(Matrix, exception_elliminate)
