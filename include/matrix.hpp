@@ -327,7 +327,7 @@ namespace MyMatrix
                 Point pos = {i, i};
                 Point pivot_location = B.get_pivot_of_submatrix(pos); //add find max
 
-                if (abs(B[pivot_location.x][pivot_location.y]) < epsilon)
+                if (std::abs(B[pivot_location.x][pivot_location.y]) < epsilon)
                     break;
 
                 B.switch_collumnes(pivot_location.y, pos.y);
