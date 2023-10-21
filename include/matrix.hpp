@@ -12,7 +12,7 @@ namespace MyMatrix
         int x, y;
     };
 
-    const double epsilon = 0.000001;
+    const double epsilon = 0.00000001;
 
     template <typename T = double>
     class Matrix
@@ -312,7 +312,7 @@ namespace MyMatrix
         };
     };
 
-    //specialize only for n*n matrixes
+
     template <typename T>
     double det(const Matrix<T> A)
         {
@@ -324,9 +324,11 @@ namespace MyMatrix
 
             for(int i = 0; i < B.strings_num; ++i)
             {   
-
                 Point pos = {i, i};
                 Point pivot_location = B.get_pivot_of_submatrix(pos); //add find max
+
+                if (abs(B[pivot_location.x][pivot_location.y]) < epsilon)
+                    break;
 
                 B.switch_collumnes(pivot_location.y, pos.y);
                 B.switch_strings(pivot_location.x, pos.x);

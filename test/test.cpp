@@ -439,6 +439,78 @@ TEST(Matrix, det_int)
     EXPECT_NEAR(expected_det, MyMatrix::det(A), 0.000000000001);
 }
 
+TEST(Matrix, det7)
+{
+    std::ifstream file;
+
+    file.open("../../test/888.in");
+
+    int N;
+    file >> N;
+
+    MyMatrix::Matrix A(N);
+
+    for (int i = 0; i < N; ++i)
+        for (int j = 0; j < N; ++j)
+            file >> A[i][j];
+
+    double expected_det;
+
+    file >> expected_det;
+
+    file.close();
+
+    EXPECT_NEAR(MyMatrix::det(A), expected_det, 0.00000001);
+}
+
+TEST(Matrix, det8)
+{
+    std::ifstream file;
+
+    file.open("../../test/999.in");
+
+    int N;
+    file >> N;
+
+    MyMatrix::Matrix A(N);
+
+    for (int i = 0; i < N; ++i)
+        for (int j = 0; j < N; ++j)
+            file >> A[i][j];
+
+    double expected_det;
+
+    file >> expected_det;
+
+    file.close();
+
+    EXPECT_NEAR(MyMatrix::det(A), expected_det, 0.00000001);
+}
+
+TEST(Matrix, det9)
+{
+    std::ifstream file;
+
+    file.open("../../test/AAA.in");
+
+    int N;
+    file >> N;
+
+    MyMatrix::Matrix A(N);
+
+    for (int i = 0; i < N; ++i)
+        for (int j = 0; j < N; ++j)
+            file >> A[i][j];
+
+    double expected_det;
+
+    file >> expected_det;
+
+    file.close();
+
+    EXPECT_NEAR(MyMatrix::det(A), expected_det, 0.00000001);
+}
+
 TEST(Matrix, cast_to_double_and_move_assign)
 {
     MyMatrix::Matrix<int> A(2);
