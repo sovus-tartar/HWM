@@ -88,7 +88,7 @@ namespace MyMatrix
             for (int i = S.x; i < Matrix<T>::strings_num; ++i)
                 for (int j = S.y; j < Matrix<T>::collumns_num; ++j)
                 {
-                    T temp = abs(Matrix<T>::access(i, j));
+                    T temp = std::abs(Matrix<T>::access(i, j));
                     if (temp > pivot)
                     {
                         pivot = temp;
