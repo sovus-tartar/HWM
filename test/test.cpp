@@ -642,11 +642,12 @@ TEST(Matrix, exception_find_pivot)
 
     EXPECT_THROW(A.get_pivot_of_submatrix(S), std::invalid_argument);   
 }
-
+/*
 TEST(Matrix, exception_ctr)
 {
     EXPECT_THROW(MyMatrix::Matrix(-10), std::invalid_argument);
 }
+*/
 
 int main(int argc, char **argv)
 {

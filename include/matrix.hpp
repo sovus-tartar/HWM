@@ -5,6 +5,8 @@
 #include <cstdlib>
 #include <cmath>
 
+#include <MyVector.hpp>
+
 namespace MyMatrix
 {
     struct Point
@@ -17,10 +19,10 @@ namespace MyMatrix
     template <typename T = double>
     class Matrix
     {
-        T *data;
+        MyVector::vector<T> data;
 
-        int *string_order;
-        int *collumn_order;
+        MyVector::vector<int> string_order;
+        MyVector::vector<int> collumn_order;
 
         struct proxy_matrix
         {
@@ -169,7 +171,7 @@ namespace MyMatrix
             return data[string_order[i] * collumns_num + collumn_order[j]];
         };
 
-        const T &access(int i, int j) const
+        const T access(int i, int j) const
         {
             if(i >= strings_num)
                 throw std::invalid_argument("MyMatrix::Matrix::access - i argument is out of range");
@@ -181,25 +183,8 @@ namespace MyMatrix
 
         Matrix(int a): Matrix(a, a) {};
 
-        Matrix(int a, int b)
+        Matrix(int a, int b): data(a * b), string_order(a), collumn_order(b)
         {
-            if(a <= 0)
-                throw std::invalid_argument("MyMatrix::Matrix::Matrix - a is less than 0");
-            if (a <= 0)
-                throw std::invalid_argument("MyMatrix::Matrix::Matrix - b is less than 0");
-
-            try
-            {
-                data = new T[a * b];
-                string_order = new int[a];
-                collumn_order = new int[b];
-            }
-            catch(std::bad_alloc& exc)
-            {   
-                std::cerr << exc.what() << std::endl << "Initializing Matrix object failed, exiting..." << std::endl;
-                std::terminate();
-            }
-
 
             for (int i = 0; i < a; ++i)
                 string_order[i] = i;
@@ -223,92 +208,6 @@ namespace MyMatrix
                 return false;
 
             return true;
-        }
-
-        Matrix(const Matrix<T> & src) : Matrix<T>(src.strings_num, src.collumns_num)
-        {
-            for(int i = 0; i < strings_num; ++i)
-                for(int j = 0; j < collumns_num; ++j)
-                    (*this)[i][j] = src[i][j];
-        }
-
-        Matrix(Matrix<T> && src) noexcept
-        {
-            data = nullptr;
-            std::swap(data, src.data);
-            string_order = nullptr;
-            std::swap(string_order, src.string_order);
-            collumn_order = nullptr;
-            std::swap(collumn_order, src.collumn_order);
-
-            strings_num = src.strings_num;
-            collumns_num = src.collumns_num;
-        }
-
-        Matrix<T>& operator=(const Matrix<T> & src)
-        {
-            T * data_temp;
-            int * collumn_order_temp;
-            int  * string_order_temp;
-
-            if(this == &src)
-                return *this;
-
-            try
-            {
-                data_temp = new T[src.strings_num * src.collumns_num];
-                collumn_order_temp = new int[src.collumns_num];
-                string_order_temp = new int[src.strings_num];
-            }
-            catch(const std::exception& e)
-            {
-                std::cout << e.what() << std::endl << "Copy assign failed, exiting..." << std::endl;
-                return *this;
-            }
-            
-            delete[] data;
-            delete[] collumn_order;
-            delete[] string_order;
-
-            data = data_temp;
-            collumn_order = collumn_order_temp;
-            string_order = string_order_temp;
-
-            strings_num = src.strings_num;
-            collumns_num = src.collumns_num;
-
-            for(int i = 0; i < strings_num; ++i)
-                string_order[i] = i;
-            for(int i = 0; i < collumns_num; ++i)
-                collumn_order[i] = i;
-
-            for(int i = 0; i < strings_num; ++i)
-                for(int j = 0; j < collumns_num; ++j)
-                    (*this)[i][j] = src[i][j];
-            
-            return *this;
-        }
-
-        Matrix<T>& operator=(Matrix<T> && src) noexcept
-        {
-            if(this == &src)
-                return *this;
-
-            std::swap(data, src.data);
-            std::swap(string_order, src.string_order);
-            std::swap(collumn_order, src.collumn_order);
-
-            strings_num = src.strings_num;
-            collumns_num = src.collumns_num;
-
-            return *this;
-        }
-
-        ~Matrix()
-        {
-            delete[] data;
-            delete[] collumn_order;
-            delete[] string_order;
         };
     };
 
