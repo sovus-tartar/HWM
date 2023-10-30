@@ -362,8 +362,6 @@ TEST(Matrix, det4)
 
     file.close();
 
-    
-
     EXPECT_NEAR(MyMatrix::det(A), expected_det, 0.000000001);
 }
 
