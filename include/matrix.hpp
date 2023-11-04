@@ -9,8 +9,6 @@
 #include <MyVector.hpp>
 #include <stdexcept>
 
-// TODO: operator +, - as EXTERN CLASS
-// TODO: operator * as number to matrix
 // TODO: func multiply as matrix multiplication
 
 namespace MyMatrix
@@ -69,6 +67,15 @@ namespace MyMatrix
 
         int strings_num;
         int collumns_num;
+
+        Matrix<T> & multiply(const T k)
+        {
+            for(int i = 0; i < strings_num; ++i)
+                for(int j = 0; j < collumns_num; ++j)
+                    access(i, j) *= k;
+
+            return *this;
+        }
 
         Matrix<T> & operator+=(const Matrix<T> & rhs)
         {
@@ -260,6 +267,37 @@ namespace MyMatrix
         };
     };
 
+    template<typename T>
+    Matrix<T> operator*(const T & k, const Matrix<T> & A)
+    {
+        Matrix<T> temp(A);
+        temp.multiply(k);
+        return temp;
+    }
+
+    template<typename T>
+    Matrix<T> operator*(const Matrix<T> & A, const T & k)
+    {
+        Matrix<T> temp(A);
+        temp.multiply(k);
+        return temp;
+    }
+
+    template <typename T>
+    Matrix<T> operator+(const Matrix<T> & lhs, const Matrix<T> & rhs)
+    {
+        Matrix<T> temp(lhs);
+        temp += rhs;
+        return temp;
+    }
+
+    template <typename T>
+    Matrix<T> operator-(const Matrix<T> & lhs, const Matrix<T> & rhs)
+    {
+        Matrix<T> temp(lhs);
+        temp -= rhs;
+        return temp;
+    }
 
     template <typename T>
     double det(const Matrix<T> & A)

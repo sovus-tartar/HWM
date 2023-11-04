@@ -716,6 +716,97 @@ TEST(Matrix, operator_minus_assign_exception)
     EXPECT_THROW(A += B, std::invalid_argument);
 }
 
+TEST(Matrix, operator_plus)
+{
+    MyMatrix::Matrix<int> A (2);
+    MyMatrix::Matrix<int> B (2);
+    MyMatrix::Matrix<int> C (2);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[1][0] = 3;
+    A[1][1] = 4;
+
+    B[0][0] = 5;
+    B[0][1] = 6;
+    B[1][0] = 7;
+    B[1][1] = 8;
+
+    C[0][0] = 6;
+    C[0][1] = 8;
+    C[1][0] = 10;
+    C[1][1] = 12;
+
+    MyMatrix::Matrix<int> D = A + B;
+
+    EXPECT_EQ(D, C);
+}
+
+TEST(Matrix, operator_minus)
+{
+    MyMatrix::Matrix<int> A (2);
+    MyMatrix::Matrix<int> B (2);
+    MyMatrix::Matrix<int> C (2);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[1][0] = 3;
+    A[1][1] = 4;
+
+    B[0][0] = 5;
+    B[0][1] = 6;
+    B[1][0] = 7;
+    B[1][1] = 8;
+
+    C[0][0] = -4;
+    C[0][1] = -4;
+    C[1][0] = -4;
+    C[1][1] = -4;
+
+    MyMatrix::Matrix<int> D = A - B;
+
+    EXPECT_EQ(D, C);
+}
+
+TEST(Matrix, multiply)
+{
+    MyMatrix::Matrix<int> A (2);
+    MyMatrix::Matrix<int> B (2);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[1][0] = 3;
+    A[1][1] = 4;
+
+    B[0][0] = 2;
+    B[0][1] = 4;
+    B[1][0] = 6;
+    B[1][1] = 8;
+
+    A.multiply(2);
+
+    EXPECT_EQ(A, B);
+}
+
+TEST(Matrix, operator_multiply_by_const)
+{
+    MyMatrix::Matrix<int> A (2);
+    MyMatrix::Matrix<int> B (2);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[1][0] = 3;
+    A[1][1] = 4;
+
+    B[0][0] = 2;
+    B[0][1] = 4;
+    B[1][0] = 6;
+    B[1][1] = 8;
+
+    MyMatrix::Matrix<int> C = A * 2;
+    MyMatrix::Matrix<int> D = 2 * A;
+
+    EXPECT_EQ(C, B);
+    EXPECT_EQ(D, B);
+}
+
+
 
 int main(int argc, char **argv)
 {
