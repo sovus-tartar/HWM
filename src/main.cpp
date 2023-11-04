@@ -1,11 +1,10 @@
+#include <exception>
 #include <iostream>
 #include <matrix.hpp>
 
-// TODO: better tests for ctors
-
 int main(int argc, char **argv)
 {
-    /*
+    
     try
     {
         int N;
@@ -26,18 +25,5 @@ int main(int argc, char **argv)
     }
 
     return 0;
-    */
-
-    MyMatrix::Matrix A(3);
-    A[0][0] = 1;
-    A[0][1] = 2;
-    A[0][2] = 3;
-    A[1][0] = 2;
-    A[1][1] = 4;
-    A[1][2] = 6;
-    A[2][0] = 3;
-    A[2][1] = 6;
-    A[2][2] = 9;
-    std::cout << "Here" << std::endl;
-    A = A;
+    
 }

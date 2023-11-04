@@ -4,6 +4,7 @@
 #include <chrono>
 
 #include <matrix.hpp>
+#include <stdexcept>
 
 TEST(Matrix, ctr)
 {
@@ -622,7 +623,7 @@ TEST(Matrix, exception_elliminate)
     A[2][1] = 6;
     A[2][2] = 9;    
 
-    EXPECT_THROW(A.eliminate(4), std::invalid_argument);   
+    EXPECT_THROW(A.eliminate(4), std::out_of_range);   
 }
 
 TEST(Matrix, exception_find_pivot)
@@ -640,14 +641,81 @@ TEST(Matrix, exception_find_pivot)
 
     MyMatrix::Point S = {5, 5};
 
-    EXPECT_THROW(A.get_pivot_of_submatrix(S), std::invalid_argument);   
+    EXPECT_THROW(A.get_pivot_of_submatrix(S), std::out_of_range);   
 }
-/*
+
 TEST(Matrix, exception_ctr)
 {
-    EXPECT_THROW(MyMatrix::Matrix(-10), std::invalid_argument);
+    EXPECT_THROW(MyMatrix::Matrix(-10), std::range_error);
 }
-*/
+
+TEST(Matrix, operator_plus_assign)
+{
+    MyMatrix::Matrix<int> A (2);
+    MyMatrix::Matrix<int> B (2);
+    MyMatrix::Matrix<int> C (2);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[1][0] = 3;
+    A[1][1] = 4;
+
+    B[0][0] = 5;
+    B[0][1] = 6;
+    B[1][0] = 7;
+    B[1][1] = 8;
+
+    C[0][0] = 6;
+    C[0][1] = 8;
+    C[1][0] = 10;
+    C[1][1] = 12;
+
+    A += B;
+
+    EXPECT_EQ(A, C);
+
+}
+
+TEST(Matrix, operator_plus_assign_exception)
+{
+    MyMatrix::Matrix<int> A(2);
+    MyMatrix::Matrix<int> B(3);
+
+    EXPECT_THROW(A += B, std::invalid_argument);
+}
+
+TEST(Matrix, operator_minus_assign)
+{
+    MyMatrix::Matrix<int> A (2);
+    MyMatrix::Matrix<int> B (2);
+    MyMatrix::Matrix<int> C (2);
+    A[0][0] = 1;
+    A[0][1] = 2;
+    A[1][0] = 3;
+    A[1][1] = 4;
+
+    B[0][0] = 5;
+    B[0][1] = 6;
+    B[1][0] = 7;
+    B[1][1] = 8;
+
+    C[0][0] = -4;
+    C[0][1] = -4;
+    C[1][0] = -4;
+    C[1][1] = -4;
+
+    A -= B;
+
+    EXPECT_EQ(A, C);
+}
+
+TEST(Matrix, operator_minus_assign_exception)
+{
+    MyMatrix::Matrix<int> A(2);
+    MyMatrix::Matrix<int> B(3);
+
+    EXPECT_THROW(A += B, std::invalid_argument);
+}
+
 
 int main(int argc, char **argv)
 {

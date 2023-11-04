@@ -1,11 +1,17 @@
 #pragma once
 
+#include <exception>
 #include <iostream>
 #include <cassert>
 #include <cstdlib>
 #include <cmath>
 
 #include <MyVector.hpp>
+#include <stdexcept>
+
+// TODO: operator +, - as EXTERN CLASS
+// TODO: operator * as number to matrix
+// TODO: func multiply as matrix multiplication
 
 namespace MyMatrix
 {
@@ -50,10 +56,48 @@ namespace MyMatrix
             }
         };
 
+        bool compare_size(const Matrix<T> & B) const 
+        {
+            if((strings_num == B.strings_num) && (collumns_num == B.collumns_num))
+                return true;
+            else
+                return false;
+        }
+
+
     public:
 
         int strings_num;
         int collumns_num;
+
+        Matrix<T> & operator+=(const Matrix<T> & rhs)
+        {
+            if(!compare_size(rhs))
+                throw std::invalid_argument("Matrix::operator+= : sizes are different");
+
+            for(int i = 0; i < strings_num; ++i)
+                for(int j = 0; j < collumns_num; ++j)
+                    access(i, j) += rhs.access(i, j);
+
+            return *this;
+        }
+
+        Matrix<T> operator-() const
+        {
+            Matrix<T> temp(strings_num, collumns_num);
+
+            for(int i = 0; i < strings_num; ++i)
+                for(int j = 0; j < collumns_num; ++j)
+                    temp.access(i, j) = -access(i, j);
+
+            return temp;
+        }
+
+        Matrix<T> & operator-=(const Matrix<T> & rhs)
+        {
+            operator+=(-rhs);
+            return *this;
+        }
 
         Matrix<T> transpose() const  //better Matrix& transpose() &
         {
@@ -61,7 +105,7 @@ namespace MyMatrix
 
             for(int i = 0; i < strings_num; ++i)
                 for(int j = 0; j < collumns_num; ++j)
-                    B[j][i] = access(i, j);
+                    B.access(j, i) = access(i, j);
 
             return B;
         }
@@ -72,25 +116,25 @@ namespace MyMatrix
 
             for(int i = 0; i < strings_num; ++i)
                 for(int j = 0; j < collumns_num; ++j)
-                    B[i][j] = static_cast<double>(access(i, j));
+                    B.access(i, j) = static_cast<double>(access(i, j));
 
             return B;
         }
 
-        Point get_pivot_of_submatrix(const Point S)
+        Point get_pivot_of_submatrix(const Point & S)
         {
             if(S.x >= strings_num)
-                throw std::invalid_argument("MyMatrix::Matrix::get_pivot_of_submatrix - S.x is out of range");
+                throw std::out_of_range("MyMatrix::Matrix::get_pivot_of_submatrix - S.x is out of range");
             if (S.y >= collumns_num)
-                throw std::invalid_argument("MyMatrix::Matrix::get_pivot_of_submatrix - S.y is out of range");
+                throw std::out_of_range("MyMatrix::Matrix::get_pivot_of_submatrix - S.y is out of range");
 
             T pivot = 0;
             Point pivot_location = {0, 0};        
 
-            for (int i = S.x; i < Matrix<T>::strings_num; ++i)
-                for (int j = S.y; j < Matrix<T>::collumns_num; ++j)
+            for (int i = S.x; i < strings_num; ++i)
+                for (int j = S.y; j < collumns_num; ++j)
                 {
-                    T temp = std::abs(Matrix<T>::access(i, j));
+                    T temp = std::abs(access(i, j));
                     if (temp > pivot)
                     {
                         pivot = temp;
@@ -101,20 +145,23 @@ namespace MyMatrix
             return pivot_location;
         };
 
-        void eliminate(int x)
+        void eliminate(const int x)
         {
             if(x >= strings_num)
-                throw std::invalid_argument("MyMatrix::Matrix::eliminate - x is out of range of matrix");
+                throw std::out_of_range("MyMatrix::Matrix::eliminate - x is out of range of matrix");
 
-            T pivot = (*this)[x][x];
+            T pivot = access(x, x);
+
+            if(std::abs(pivot) < epsilon)
+                throw std::logic_error("Matrix::eliminate - pivot A[x][x] is zero");
 
             for(int i = x + 1; i < this->strings_num; ++i)
             {
                 
-                T koef = (*this)[i][x] / pivot;
+                T koef = access(i, x) / pivot;
 
                 for(int j = x; j < this->collumns_num; ++j)
-                    (*this)[i][j] = (*this)[i][j] - (*this)[x][j] * koef;
+                    access(i, j) = access(i, j) - access(x, j) * koef;
             }
         };
 
@@ -123,7 +170,7 @@ namespace MyMatrix
             for(int i =  0; i < strings_num; ++i)
             {
                 for(int j = 0; j < collumns_num; ++j)
-                    std::cout << (*this)[i][j] << " ";
+                    std::cout << access(i, j) << " ";
                 
                 std::cout << std::endl;
             }
@@ -185,6 +232,8 @@ namespace MyMatrix
 
         Matrix(int a, int b): data(a * b), string_order(a), collumn_order(b)
         {
+            if ((a <= 0) || (b <= 0))
+                throw std::range_error("Matrix::ctr - size is less then 0");
 
             for (int i = 0; i < a; ++i)
                 string_order[i] = i;
@@ -195,13 +244,13 @@ namespace MyMatrix
             strings_num = a;
         };
 
-        bool operator==(Matrix<T>& rhs) const  
+        bool operator==(const Matrix<T>& rhs) const  
         {
-            if((strings_num == rhs.strings_num) && (collumns_num == rhs.collumns_num))
+            if(compare_size(rhs))
             {
                 for(int i = 0; i < strings_num; ++i)
                     for(int j = 0; j < collumns_num; ++j)
-                        if((*this)[i][j] - rhs[i][j] >= epsilon)
+                        if(access(i, j) - rhs.access(i, j) >= epsilon)
                             return false;
             }
             else
@@ -213,10 +262,10 @@ namespace MyMatrix
 
 
     template <typename T>
-    double det(const Matrix<T> A)
+    double det(const Matrix<T> & A)
         {
             if(A.strings_num != A.collumns_num)
-                throw std::invalid_argument("MyMatrix::det - matrix is not n*n");
+                throw std::invalid_argument("MyMatrix::det - matrix is not n * n");
 
             Matrix<double> B(A);
             int change_sign = 0;
@@ -224,7 +273,7 @@ namespace MyMatrix
             for(int i = 0; i < B.strings_num; ++i)
             {   
                 Point pos = {i, i};
-                Point pivot_location = B.get_pivot_of_submatrix(pos); //add find max
+                Point pivot_location = B.get_pivot_of_submatrix(pos);
 
                 if (std::abs(B[pivot_location.x][pivot_location.y]) < epsilon)
                     break;
@@ -238,7 +287,7 @@ namespace MyMatrix
             double val = 1.0;
             for(int i = 0; i < B.strings_num; ++i)
             {
-                val = val * B[i][i];
+                val = val * B.access(i, i);
             }
             
 

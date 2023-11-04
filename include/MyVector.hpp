@@ -31,13 +31,13 @@ namespace MyVector
 
         vector(const vector<T> & src): size(src.size), data(new T[src.size]) //copy ctr
         {
-            std::cout << "Copy ctr called" << std::endl;
+            // std::cout << "Copy ctr called" << std::endl;
             std::copy(src.data, src.data + size, data);
         }
 
         vector(vector<T> && src) noexcept//move ctr
         {
-            std::cout << "Move ctr called" << std::endl;
+            // std::cout << "Move ctr called" << std::endl;
             data = nullptr;
 
             std::swap(data, src.data);
@@ -46,7 +46,7 @@ namespace MyVector
 
         vector<T> & operator=(const vector<T> & src) //copy assign
         {
-            std::cout << "Copy assign called" << std::endl;
+            // std::cout << "Copy assign called" << std::endl;
             delete[] data;
 
             size = src.size;
@@ -58,7 +58,7 @@ namespace MyVector
 
         vector<T> & operator=(vector<T> && src) noexcept //move assign
         { 
-            std::cout << "Move assign called" << std::endl;
+            // std::cout << "Move assign called" << std::endl;
             std::swap(data, src.data);
             std::swap(size, src.size);
 
