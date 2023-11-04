@@ -61,12 +61,41 @@ namespace MyMatrix
             else
                 return false;
         }
-
+        
+        bool multiply_check(const Matrix<T> & B) const //A(m * n) B(n * k)
+        {
+            if(collumns_num == B.strings_num)
+                return true;
+            return false;
+        }
 
     public:
 
         int strings_num;
         int collumns_num;
+
+        Matrix<T> multiply(const Matrix<T> & A) const 
+        {
+            if(!multiply_check(A))
+                throw std::invalid_argument("Matrix::multiply - impossible to multiply, wrong sizes\n");
+
+            Matrix<T> temp(strings_num, A.collumns_num);
+
+            for(int i = 0; i < temp.strings_num; ++i)
+                for(int j = 0; j < temp.collumns_num; ++j)
+                {
+                    T sum{};
+                    
+                    for (int k = 0; k < collumns_num; ++k)
+                    {
+                        sum += access(i, k) * A.access(k, j);
+                    }
+
+                    temp.access(i, j) = sum;
+                }
+                
+            return temp;
+        }
 
         Matrix<T> & multiply(const T k)
         {
@@ -80,7 +109,7 @@ namespace MyMatrix
         Matrix<T> & operator+=(const Matrix<T> & rhs)
         {
             if(!compare_size(rhs))
-                throw std::invalid_argument("Matrix::operator+= : sizes are different");
+                throw std::invalid_argument("Matrix::operator+= : sizes are different\n");
 
             for(int i = 0; i < strings_num; ++i)
                 for(int j = 0; j < collumns_num; ++j)
