@@ -269,10 +269,10 @@ namespace MyMatrix
 
         Matrix(int a): Matrix(a, a) {};
 
-        Matrix(int a, int b): data(a * b), string_order(a), collumn_order(b)
+        Matrix(int a, int b): data(a * b),string_order(a), collumn_order(b)
         {
             if ((a <= 0) || (b <= 0))
-                throw std::range_error("Matrix::ctr - size is less then 0");
+                throw std::invalid_argument("Matrix::ctr - size is less then 0");
 
             for (int i = 0; i < a; ++i)
                 string_order[i] = i;

@@ -646,7 +646,7 @@ TEST(Matrix, exception_find_pivot)
 
 TEST(Matrix, exception_ctr)
 {
-    EXPECT_THROW(MyMatrix::Matrix(-10), std::range_error);
+    EXPECT_THROW(MyMatrix::Matrix(-10), std::invalid_argument);
 }
 
 TEST(Matrix, operator_plus_assign)
