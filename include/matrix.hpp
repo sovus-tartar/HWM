@@ -158,7 +158,7 @@ namespace MyMatrix
             return B;
         }
 
-        Point get_pivot_of_submatrix(const Point & S)
+        Point get_pivot_of_submatrix(const Point & S) const 
         {
             if(S.x >= strings_num)
                 throw std::out_of_range("MyMatrix::Matrix::get_pivot_of_submatrix - S.x is out of range");
@@ -204,7 +204,7 @@ namespace MyMatrix
             }
         };
 
-        void print()
+        void print() const
         {
             for(int i =  0; i < strings_num; ++i)
             {

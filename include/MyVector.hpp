@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <iostream>
 
+
 namespace MyVector
 {
     template <typename T>
@@ -14,8 +15,11 @@ namespace MyVector
 
         public:
 
-        explicit vector(unsigned size_): size(size_), data(new T[size_]) 
+        explicit vector(unsigned size_): size(size_)
         {
+            if(size_ < 0)
+                throw std::invalid_argument("MyVector::vector ctr - size < 0\n");
+            data= new T[size_];
         }
 
         vector(unsigned size_, T default_value): vector(size_) 
@@ -35,7 +39,7 @@ namespace MyVector
             std::copy(src.data, src.data + size, data);
         }
 
-        vector(vector<T> && src) noexcept//move ctr
+        vector(vector<T> && src) noexcept //move ctr
         {
             // std::cout << "Move ctr called" << std::endl;
             data = nullptr;
@@ -47,6 +51,10 @@ namespace MyVector
         vector<T> & operator=(const vector<T> & src) //copy assign
         {
             // std::cout << "Copy assign called" << std::endl;
+
+            if (&src == this)
+                return *this;
+
             delete[] data;
 
             size = src.size;
@@ -59,6 +67,9 @@ namespace MyVector
         vector<T> & operator=(vector<T> && src) noexcept //move assign
         { 
             // std::cout << "Move assign called" << std::endl;
+            if (&src == this)
+                return *this;
+
             std::swap(data, src.data);
             std::swap(size, src.size);
 
