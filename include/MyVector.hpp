@@ -54,7 +54,6 @@ namespace MyVector
 
             if (&src == this)
                 return *this;
-
             
             vector<T> temp(src);
             *this = std::move(temp);
