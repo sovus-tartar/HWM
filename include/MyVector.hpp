@@ -55,11 +55,9 @@ namespace MyVector
             if (&src == this)
                 return *this;
 
-            delete[] data;
-
-            size = src.size;
-            data = new T[size];
-            std::copy(src.data, src.data + size, data);
+            
+            vector<T> temp(src);
+            *this = std::move(temp);
 
             return *this;
         } 
