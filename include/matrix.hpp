@@ -5,6 +5,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <cmath>
+#include <limits>
 
 #include <MyVector.hpp>
 #include <stdexcept>
@@ -18,7 +19,7 @@ namespace MyMatrix
         int x, y;
     };
 
-    const double epsilon = 0.00000001;
+    const double epsilon = std::numeric_limits<double>::epsilon();
 
     template <typename T = double>
     class Matrix
@@ -177,6 +178,8 @@ namespace MyMatrix
                         pivot_location = {i, j};
                     }
                 }
+
+            //std::cout << pivot << std::endl;
 
             return pivot_location;
         };
