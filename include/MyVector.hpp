@@ -59,7 +59,7 @@ namespace MyVector
             *this = std::move(temp);
 
             return *this;
-        } 
+        }
 
         vector<T> & operator=(vector<T> && src) noexcept //move assign
         { 
@@ -122,7 +122,7 @@ namespace MyVector
             std::cout << "]" << std::endl;
         }
 
-        const unsigned len()
+        unsigned len()
         {
             return size;
         }

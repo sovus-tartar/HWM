@@ -158,28 +158,26 @@ namespace MyMatrix
             return B;
         }
 
-        Point get_pivot_of_submatrix(const Point & S) const 
+        Point get_pivot_of_collumn(const Point & S) const 
         {
             if(S.x >= strings_num)
-                throw std::out_of_range("MyMatrix::Matrix::get_pivot_of_submatrix - S.x is out of range");
+                throw std::out_of_range("MyMatrix::Matrix::get_pivot_of_collumn - S.x is out of range");
             if (S.y >= collumns_num)
-                throw std::out_of_range("MyMatrix::Matrix::get_pivot_of_submatrix - S.y is out of range");
+                throw std::out_of_range("MyMatrix::Matrix::get_pivot_of_collumn - S.y is out of range");
 
             T pivot = 0;
             Point pivot_location = {0, 0};        
 
             for (int i = S.x; i < strings_num; ++i)
-                for (int j = S.y; j < collumns_num; ++j)
+            {
+                T temp = std::abs(access(i, S.y));
+                if (temp > pivot)
                 {
-                    T temp = std::abs(access(i, j));
-                    if (temp > pivot)
-                    {
-                        pivot = temp;
-                        pivot_location = {i, j};
-                    }
+                    pivot = temp;
+                    pivot_location = {i, S.y};
                 }
 
-            //std::cout << pivot << std::endl;
+            }
 
             return pivot_location;
         };
@@ -196,10 +194,8 @@ namespace MyMatrix
 
             for(int i = x + 1; i < this->strings_num; ++i)
             {
-                
                 T koef = access(i, x) / pivot;
-
-                for(int j = x; j < this->collumns_num; ++j)
+                for(int j = 0; j < this->collumns_num; ++j)
                     access(i, j) = access(i, j) - access(x, j) * koef;
             }
         };
@@ -343,7 +339,7 @@ namespace MyMatrix
             for(int i = 0; i < B.strings_num; ++i)
             {   
                 Point pos = {i, i};
-                Point pivot_location = B.get_pivot_of_submatrix(pos);
+                Point pivot_location = B.get_pivot_of_collumn(pos);
 
                 if (std::abs(B[pivot_location.x][pivot_location.y]) < epsilon)
                     break;

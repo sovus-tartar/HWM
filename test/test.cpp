@@ -87,10 +87,10 @@ TEST(Matrix, get_pivot1)
 
     MyMatrix::Point p = {0, 0};
 
-    MyMatrix::Point t = A.get_pivot_of_submatrix(p);
+    MyMatrix::Point t = A.get_pivot_of_collumn(p);
 
     EXPECT_EQ(t.x, 2);
-    EXPECT_EQ(t.y, 2);
+    EXPECT_EQ(t.y, 0);
 }
 
 TEST(Matrix, get_pivot2)
@@ -106,9 +106,9 @@ TEST(Matrix, get_pivot2)
     A[2][1] = 4;
     A[2][2] = 13;
 
-    MyMatrix::Point p = {0, 0};
+    MyMatrix::Point p = {0, 2};
 
-    MyMatrix::Point t = A.get_pivot_of_submatrix(p);
+    MyMatrix::Point t = A.get_pivot_of_collumn(p);
 
     EXPECT_EQ(t.x, 0);
     EXPECT_EQ(t.y, 2);
@@ -510,6 +510,30 @@ TEST(Matrix, det9)
     EXPECT_NEAR(MyMatrix::det(A), expected_det, 0.00000001);
 }
 
+TEST(Matrix, det10)
+{
+    std::ifstream file;
+
+    file.open("../../test/BBB.in");
+
+    int N;
+    file >> N;
+
+    MyMatrix::Matrix A(N);
+
+    for (int i = 0; i < N; ++i)
+        for (int j = 0; j < N; ++j)
+            file >> A[i][j];
+
+    double expected_det;
+
+    file >> expected_det;
+
+    file.close();
+
+    EXPECT_NEAR(MyMatrix::det(A), expected_det, 1e-4);
+}
+
 TEST(Matrix, cast_to_double_and_move_assign)
 {
     MyMatrix::Matrix<int> A(2);
@@ -628,10 +652,10 @@ TEST(Matrix, exception_elliminate)
 
 TEST(Matrix, exception_find_pivot)
 {
-    MyMatrix::Matrix A(3);
-    A[0][0] = 1;
-    A[0][1] = 2;
-    A[0][2] = 3;
+    MyMatrix::Matrix A(3); 
+    A[0][0] = 1; //1 2 3 
+    A[0][1] = 2; //2 4 6
+    A[0][2] = 3; //3 6 9
     A[1][0] = 2;
     A[1][1] = 4;
     A[1][2] = 6;
@@ -641,7 +665,7 @@ TEST(Matrix, exception_find_pivot)
 
     MyMatrix::Point S = {5, 5};
 
-    EXPECT_THROW(A.get_pivot_of_submatrix(S), std::out_of_range);   
+    EXPECT_THROW(A.get_pivot_of_collumn(S), std::out_of_range);   
 }
 
 TEST(Matrix, exception_ctr)
