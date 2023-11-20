@@ -89,7 +89,7 @@ namespace MyVector
             return data[i];
         }
 
-        const T access(const unsigned i) && 
+        const T access(const unsigned i) const && 
         {
             if (i >= size)
                 throw std::out_of_range("Index i is out of range of this vector\n");
@@ -112,7 +112,7 @@ namespace MyVector
             return access(i);
         }
 
-        void print()
+        void print() const
         {
             std::cout << "[ ";
 
@@ -122,12 +122,12 @@ namespace MyVector
             std::cout << "]" << std::endl;
         }
 
-        unsigned len()
+        unsigned len() const
         {
             return size;
         }
 
-        bool operator==(const vector<T> & rhs)
+        bool operator==(const vector<T> & rhs) const
         {
             if(size != rhs.size)
                 return false;
@@ -139,7 +139,7 @@ namespace MyVector
             return true;
         }
 
-        bool operator==(const vector<T> && rhs)
+        bool operator==(const vector<T> && rhs) const
         {
             if(size != rhs.size)
                 return false;
